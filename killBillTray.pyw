@@ -63,10 +63,7 @@ class Widget(QtGui.QWidget):
         os.system('taskkill /f /im ' + prog)
 
         if self._restart[prog]:
-            self.start(prog)
-
-    def start(self, prog):
-        os.system(prog)        
+            os.system(prog)        
 
     def closeEvent(self, event):
         self.hide()

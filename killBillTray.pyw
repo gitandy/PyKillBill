@@ -18,11 +18,16 @@ class Widget(QtGui.QWidget):
 
         self.connect(self._signalMapper, QtCore.SIGNAL('mapped(const QString &)'), self.kill)
 
+        aboutAction = QtGui.QAction('&About', self)
+        aboutAction.setIcon(QtGui.QIcon(':/images/info.png'))
+        self.connect(aboutAction, QtCore.SIGNAL('triggered()'), self.showAbout)
+
         quitAction = QtGui.QAction('&Quit', self)
         quitAction.setIcon(QtGui.QIcon(':/images/exit.png'))
         self.connect(quitAction, QtCore.SIGNAL('triggered()'), app, QtCore.SLOT('quit()'))
 
         self._trayIconMenu.addSeparator()
+        self._trayIconMenu.addAction(aboutAction)
         self._trayIconMenu.addAction(quitAction)
 
         trayIcon = QtGui.QSystemTrayIcon(self)
@@ -86,6 +91,10 @@ class Widget(QtGui.QWidget):
     def closeEvent(self, event):
         self.hide()
         event.ignore()
+
+    def showAbout(self):
+        QtGui.QMessageBox.information(self, self.tr("About"),
+                                      "(c) 2011, Andreas Schawo\n\n" + self.tr("Kill Bill") + "\n" + self.tr("Version") + ": " + "0.1")
 
 
 def main():

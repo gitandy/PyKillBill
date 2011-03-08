@@ -2,6 +2,7 @@
 <qresource prefix="/">
    <file>images/tray.png</file>
    <file>images/exit.png</file>
+   <file>images/info.png</file>
    <file>images/default.png</file>
 </qresource>
 </RCC>

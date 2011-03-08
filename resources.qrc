@@ -2,9 +2,6 @@
 <qresource prefix="/">
    <file>images/tray.png</file>
    <file>images/exit.png</file>
-   <file>images/outlook.png</file>
-   <file>images/file-manager.png</file>
-   <file>images/tgit.png</file>
-   <file>images/tsvn.png</file>
+   <file>images/default.png</file>
 </qresource>
 </RCC>

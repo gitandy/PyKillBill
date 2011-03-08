@@ -62,7 +62,7 @@ class Widget(QtGui.QWidget):
                     if config.has_option(act, 'icon'):
                         act_cfg['Icon'] = config.get(act, 'icon')
                     else:
-                        act_cfg['Icon'] = ''
+                        act_cfg['Icon'] = ':/images/default.png'
 
                     if config.has_option(act, 'priority'):
                         act_cfg['Priority'] = config.getint(act, 'priority')

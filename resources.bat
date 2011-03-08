@@ -1,0 +1,3 @@
+@echo off
+echo Generating resource file...
+C:\Python26\Lib\site-packages\PyQt4\pyrcc4 -o resources.py resources.qrc

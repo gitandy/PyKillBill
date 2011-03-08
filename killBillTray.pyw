@@ -1,5 +1,6 @@
-import sys
 import os
+import sys
+import ConfigParser
 from PyQt4 import QtCore, QtGui
 from resources import *
 
@@ -10,27 +11,9 @@ class Widget(QtGui.QWidget):
         self._signalMapper = QtCore.QSignalMapper(self)
         self._trayIconMenu = QtGui.QMenu(self)
 
-        actions_cfg = (
-            {'Title': 'Restart Outlook',
-             'Icon': ':/images/outlook.png',
-             'Restart': True,
-             'Exe': 'outlook.exe'},
-            {'Title': 'Restart Explorer',
-             'Icon': ':/images/file-manager.png',
-             'Restart': True,
-             'Exe': 'explorer.exe'},
-            {'Title': 'Kill TGitCache',
-             'Icon': ':/images/tgit.png',
-             'Restart': False,
-             'Exe': 'TGitCache.exe'},
-            {'Title': 'Kill TSVNCache',
-             'Icon': ':/images/tsvn.png',
-             'Restart': False,
-             'Exe': 'TSVNCache.exe'})
-
         self._restart = {}
 
-        for act_cfg in actions_cfg:
+        for act_cfg in self._read_config():
             self._restart[act_cfg['Exe']] = self._init_action(act_cfg)
 
         self.connect(self._signalMapper, QtCore.SIGNAL('mapped(const QString &)'), self.kill)
@@ -56,6 +39,41 @@ class Widget(QtGui.QWidget):
         self._trayIconMenu.addAction(action)
 
         return cfg['Restart']
+
+    def _read_config(self):
+        actions_cfg = ()
+        
+        config = ConfigParser.RawConfigParser()
+        config.read('KillBill.ini')
+        actions = config.sections()
+
+        for act in actions:
+            if config.has_option(act, 'exe'):
+                try:
+                    act_cfg = {}
+                    act_cfg['Title'] = act
+                    act_cfg['Exe'] = config.get(act, 'exe')
+
+                    if config.has_option(act, 'restart'):
+                        act_cfg['Restart'] = config.getboolean(act, 'restart')
+                    else:
+                        act_cfg['Restart'] = False
+
+                    if config.has_option(act, 'icon'):
+                        act_cfg['Icon'] = config.get(act, 'icon')
+                    else:
+                        act_cfg['Icon'] = ''
+
+                    if config.has_option(act, 'priority'):
+                        act_cfg['Priority'] = config.getint(act, 'priority')
+                    else:
+                        act_cfg['Priority'] = 10
+
+                    actions_cfg += (act_cfg,)
+                except Exception, e:
+                    print e
+
+        return sorted(actions_cfg, lambda x, y: cmp(x['Priority'], y['Priority']))
 
     def kill(self, prog):
         prog = str(prog)

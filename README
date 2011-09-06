@@ -1,0 +1,10 @@
+PyKillBill is a little tray for the windows taskbar 
+to kill or restart different configured programs easily.
+
+The name is ambiguous:
+1. It's a list of processes to kill (or restart)
+2. I were displeased by my explorer and outlook and thought about ...
+
+The ini file is self explanatory so far.
+
+Have fun with it.

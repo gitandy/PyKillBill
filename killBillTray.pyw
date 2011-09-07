@@ -62,11 +62,11 @@ class Widget(QtGui.QWidget):
         self._trayIconMenu.addAction(aboutAction)
         self._trayIconMenu.addAction(quitAction)
 
-        trayIcon = QtGui.QSystemTrayIcon(self)
-        trayIcon.setContextMenu(self._trayIconMenu)
-        trayIcon.setToolTip('Kill Bill')
-        trayIcon.setIcon(QtGui.QIcon(':/images/tray.png'))
-        trayIcon.show()
+        self._trayIcon = QtGui.QSystemTrayIcon(self)
+        self._trayIcon.setContextMenu(self._trayIconMenu)
+        self._trayIcon.setToolTip('Kill Bill')
+        self._trayIcon.setIcon(QtGui.QIcon(':/images/tray.png'))
+        self._trayIcon.show()
 
     def _init_action(self, cfg):
         action = QtGui.QAction(cfg['Title'], self)
@@ -120,13 +120,8 @@ class Widget(QtGui.QWidget):
         if self._restart[prog]:
             os.system(prog)        
 
-    def closeEvent(self, event):
-        self.hide()
-        event.ignore()
-
     def showAbout(self):
-        QtGui.QMessageBox.information(self, self.tr("About"),
-                                      __copyright__ + "\n\n" + self.tr("Kill Bill") + "\n" + self.tr("Version") + ": " + __version__)
+        self._trayIcon.showMessage(self.tr("About"), __copyright__ + "\n\n" + self.tr("Kill Bill") + "\n" + self.tr("Version") + ": " + __version__)
 
 
 def main():

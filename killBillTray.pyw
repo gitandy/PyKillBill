@@ -7,8 +7,8 @@ from resources import *
 __version__ = '0.1'
 __author_name__ = 'Andreas Schawo'
 __author_email__ = 'andreas@schawo.de'
-__copyright__ = 'Copyright (c) 2011, Andreas Schawo, All rights reserved'
-__license__ = '''Copyright (c) 2011, Andreas Schawo <andreas@schawo.de>
+__copyright__ = 'Copyright (c) 2011-2012, Andreas Schawo, All rights reserved'
+__license__ = '''Copyright (c) 2011-2012, Andreas Schawo <andreas@schawo.de>
 
 All rights reserved.
 
@@ -45,9 +45,10 @@ class Widget(QtGui.QWidget):
 
         self._restart = {}
 
-        for act_cfg in self._read_config():
+        self._action_cfg = self._read_config()
+        for act_cfg in self._action_cfg:
             self._restart[act_cfg['Exe']] = self._init_action(act_cfg)
-
+            
         self.connect(self._signalMapper, QtCore.SIGNAL('mapped(const QString &)'), self.kill)
 
         aboutAction = QtGui.QAction('&About', self)
@@ -75,7 +76,8 @@ class Widget(QtGui.QWidget):
         self.connect(action, QtCore.SIGNAL('triggered()'), self._signalMapper, QtCore.SLOT('map()'))
         self._trayIconMenu.addAction(action)
 
-        return cfg['Restart']
+        return {'Restart': cfg['Restart'],
+                'RestartProg': '"' + cfg['Path'] + cfg['Exe'] + '" ' + cfg['Parameter']}
 
     def _read_config(self):
         actions_cfg = ()
@@ -106,6 +108,16 @@ class Widget(QtGui.QWidget):
                     else:
                         act_cfg['Priority'] = 10
 
+                    if config.has_option(act, 'path'):
+                        act_cfg['Path'] = config.get(act, 'path')
+                    else:
+                        act_cfg['Path'] = ''
+
+                    if config.has_option(act, 'parameter'):
+                        act_cfg['Parameter'] = config.get(act, 'parameter')
+                    else:
+                        act_cfg['Parameter'] = ''
+
                     actions_cfg += (act_cfg,)
                 except Exception, e:
                     print e
@@ -117,8 +129,8 @@ class Widget(QtGui.QWidget):
         
         os.system('taskkill /f /im ' + prog)
 
-        if self._restart[prog]:
-            os.system(prog)        
+        if self._restart[prog]['Restart']:
+            os.system(self._restart[prog]['RestartProg'])        
 
     def showAbout(self):
         self._trayIcon.showMessage(self.tr("About"), __copyright__ + "\n\n" + self.tr("Kill Bill") + "\n" + self.tr("Version") + ": " + __version__)

@@ -11,6 +11,7 @@ try:
     import glob, fnmatch
     import sys, os, shutil
     import operator
+    import version
 except ImportError, message:
     raise SystemExit,  "Unable to load module. %s" % message
 
@@ -28,15 +29,15 @@ class BuildExe:
         self.project_url = "about:none"
  
         #Version of program
-        self.project_version = '0.1'#version.VERSION[1:]
+        self.project_version = version.VERSION[1:]
  
         #License of the program
-        self.license = "Copyright (c) 2011, Andreas Schawo"
+        self.license = "Copyright (c) 2011-2012, Andreas Schawo"
  
         #Auhor of program
         self.author_name = "Andreas Schawo"
         self.author_email = "andreas@schawo.de"
-        self.copyright = "Copyright (c) 2011, Andreas Schawo"
+        self.copyright = "Copyright (c) 2011-2012, Andreas Schawo"
  
         #Description
         self.project_description = "Kill Bill"

@@ -5,7 +5,8 @@ import ConfigParser
 from PyQt4 import QtCore, QtGui
 from resources import *
 
-__version__ = '0.1'
+import version
+__version__ = version.VERSION[1:] + '-' + version.MODIFIED
 __author_name__ = 'Andreas Schawo'
 __author_email__ = 'andreas@schawo.de'
 __copyright__ = 'Copyright (c) 2011-2012, Andreas Schawo, All rights reserved'

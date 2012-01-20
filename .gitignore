@@ -5,3 +5,5 @@ Thumbs.db
 *.pyo
 resources.py
 dist
+
+/version.py

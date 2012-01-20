@@ -1,4 +1,5 @@
 import os
+import os.path
 import sys
 import ConfigParser
 from PyQt4 import QtCore, QtGui
@@ -77,7 +78,8 @@ class Widget(QtGui.QWidget):
         self._trayIconMenu.addAction(action)
 
         return {'Restart': cfg['Restart'],
-                'RestartProg': '"' + cfg['Path'] + cfg['Exe'] + '" ' + cfg['Parameter']}
+                'RestartProg': os.path.join(cfg['Path'], cfg['Exe']),
+                'RestartParameter': cfg['Parameter']}
 
     def _read_config(self):
         actions_cfg = ()
@@ -130,7 +132,9 @@ class Widget(QtGui.QWidget):
         os.system('taskkill /f /im ' + prog)
 
         if self._restart[prog]['Restart']:
-            os.system(self._restart[prog]['RestartProg'])        
+            args = [prog] + self._restart[prog]['RestartParameter'].split()
+
+            os.spawnv(os.P_NOWAIT, self._restart[prog]['RestartProg'], args)        
 
     def showAbout(self):
         self._trayIcon.showMessage(self.tr("About"), __copyright__ + "\n\n" + self.tr("Kill Bill") + "\n" + self.tr("Version") + ": " + __version__)
